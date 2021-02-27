@@ -41,3 +41,6 @@
 *.gif
 *.json
 
+# used binaries
+!curl.exe
+
