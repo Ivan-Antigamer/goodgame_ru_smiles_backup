@@ -358,7 +358,17 @@ int wmain(int argc, wchar_t *argv[])
     ind_pages = 1;
 
 
-    wstring DirEXE = argv[0];//ExtractFileDir(Application->ExeName);
+    //wstring DirEXE = argv[0];//ExtractFileDir(Application->ExeName);
+    // https://stackoverflow.com/questions/143174/how-do-i-get-the-directory-that-a-program-is-running-from
+    wstring DirEXE=L"";
+    {
+    wchar_t pBuf[2560];
+    size_t len = 2560;
+    int bytes = GetModuleFileName(NULL, pBuf, len);
+    if (bytes)
+    DirEXE = pBuf;
+    }
+
     ExtractFileDirMod(DirEXE);
 
     wstring str_date=L"";
@@ -393,6 +403,9 @@ int wmain(int argc, wchar_t *argv[])
     exec(L"cmd",L"/C mkdir \"" + Dir_img + L"\"",L"");
     exec(L"cmd",L"/C mkdir \"" + Dir_big + L"\"",L"");
     exec(L"cmd",L"/C mkdir \"" + Dir_gif + L"\"",L"");
+
+    wstring Prog = DirEXE+L"curl.exe";
+
     Sleep(100);
 
 #define curl_cooldown 200
@@ -403,8 +416,6 @@ int wmain(int argc, wchar_t *argv[])
             wstring nn = std::to_wstring(ind_pages);
             wcout << nn << endl;
             wstring Param_for_curl = L"-o json_smile_list_" + nn + L".json " + apibase + L"/smiles?page="+ nn;
-            wstring Prog = L"curl.exe";
-
             //wstring Dir2 = Dir.SubString(1, Dir.Length() - 2);
 
             if (skip_curl==0)
@@ -473,9 +484,6 @@ int wmain(int argc, wchar_t *argv[])
     )
     {
 
-        exec(L"cmd",L"/C mkdir \"" + Dir_img + L"\"",L"");
-        exec(L"cmd",L"/C mkdir \"" + Dir_big + L"\"",L"");
-        exec(L"cmd",L"/C mkdir \"" + Dir_gif + L"\"",L"");
         Sleep(100);
 
         ind_pages = 0;
@@ -523,7 +531,6 @@ int wmain(int argc, wchar_t *argv[])
                                         while (erase_substring(sel_text,virus)) {};
 
                                         wstring Param_for_curl = L"-o " + name_key + L"_small.png " + L"-L "+sel_text;
-                                        wstring Prog = L"curl.exe";
                                         if (skip_curl==0)
                                         {
                                         exec(Prog,Param_for_curl,Dir_img);
@@ -545,7 +552,6 @@ int wmain(int argc, wchar_t *argv[])
                         while (erase_substring(sel_text,virus)) {};
 
                         wstring Param_for_curl = L"-o " + name_key + L".png " + L"-L "+sel_text;
-                        wstring Prog = L"curl.exe";
                         if (skip_curl==0)
                         {
                             exec(Prog,Param_for_curl,Dir_big);
@@ -566,7 +572,6 @@ int wmain(int argc, wchar_t *argv[])
                         while (erase_substring(sel_text,virus)) {};
 
                         wstring Param_for_curl = L"-o " + name_key + L".gif " + L"-L "+sel_text;
-                        wstring Prog = L"curl.exe";
                         if (skip_curl==0)
                         {
                             exec(Prog,Param_for_curl,Dir_gif);
