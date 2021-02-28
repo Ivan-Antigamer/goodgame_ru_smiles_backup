@@ -43,5 +43,5 @@
 
 # used binaries
 !curl.exe
-!libcurl-x64.dll
+!libcurl*.dll
 
